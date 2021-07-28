@@ -1,0 +1,21 @@
+{
+  "name": "chat",
+  "version": "0.1.0",
+  "author": "Stéphane Fidanza <stephane.fidanza@gmail.com>",
+  "description": "Scaling websockets",
+  "dependencies": {
+    "mongodb": "^4.0.1",
+    "ws": "^7.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "scripts": {
+    "start": "node --experimental-json-modules index.js",
+    "debug": "nodemon --inspect=0.0.0.0:9229 --legacy-watch --experimental-json-modules index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "main": "index.js",
+  "type": "module",
+  "license": "MIT"
+}

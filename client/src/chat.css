@@ -1,0 +1,124 @@
+body {
+    background: var(--background-primary);
+    color: #ffffff;
+    font-family: Whitney, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    margin: 0;
+}
+
+h1 {
+    background: var(--background-primary);
+    border-bottom: 1px solid var(--header-shadow);
+    color: white;
+    font-weight: bold;
+    margin: 0;
+    padding: 0.3em 0.5em;
+}
+
+p {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+.hidden {
+    display: none;
+}
+
+#room-list {
+    background-color: var(--background-secondary);
+    float: left;
+    width: 200px;
+    height: 600px;
+}
+
+#room-content {
+    background-color: var(--background-primary);
+    height: 500px;
+    overflow-y: scroll;
+    margin: 0;
+    padding: 0 1em;
+}
+
+#user-entry {
+    background-color: var(--background-input);
+    height: 50px;
+    margin-left: 200px;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+#user-entry input[type="text"] {
+    line-height: 30px;
+    width: 600px;
+    border-radius: 10px;
+    background-color: #36393f;
+    color: white;
+    border: 1px solid #2f3136;
+}
+
+#user-entry button {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: #71b1bd;
+    border: 1px solid white;
+}
+
+#user-entry button:hover {
+    border: 1px solid grey;
+}
+
+#user-entry button:active {
+    background-color: #6196a0;
+}
+
+a.action {
+    cursor: pointer;
+    font-size: 75%;
+}
+
+ul#rooms {
+    padding: 0;
+}
+
+ul#rooms li {
+    margin: 6px 1em 0 1em;
+    padding: 0.5em;
+    list-style: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+ul#rooms li.active::before {
+    content: "» ";
+}
+
+ul#rooms li.active {
+    background-color: var(--background-primary);
+    margin-right: 0;
+    border-radius: 5px 0 0 5px;
+}
+
+ul#rooms li:hover {
+    background-color: var(--background-primary);
+}
+
+dl#room-content dt {
+    color: var(--text-highlight);
+    margin-top: 1em;
+}
+
+dl#room-content dd {
+    color: var(--text-normal);
+    margin: 0;
+}
+
+.theme {
+    --background-primary: #36393f;
+    --background-secondary: #2f3136;
+    --background-input: #40444b;
+    --header-shadow: #111111;
+    --text-highlight: #d6680e;
+    --text-normal: #dcddde;
+    --text-muted: #72767d;
+}

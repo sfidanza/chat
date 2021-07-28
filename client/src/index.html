@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Chat rooms</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link type="image/png" rel="shortcut icon" href="img/index.png"/>
+    <link href="chat.css" rel="stylesheet">
+    <script type="text/javascript" src="chat.js"></script>
+</head>
+<body class="theme">
+<h1>Chat rooms</h1>
+<div id="room-list">
+    <ul id="rooms" onclick="chat.selectRoom(event);">
+    </ul>
+</div>
+<dl id="room-content" class="hidden">
+    
+</dl>
+<div id="user-entry" class="hidden">
+    <form onsubmit="chat.post(this.elements.message.value); this.elements.message.value = ''; return false;">
+        <input type="text" name="message" />
+        <button type="submit"></button>
+    </form>
+</div>
+</body>
+</html>

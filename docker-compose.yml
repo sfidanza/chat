@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  nginx:
+    image: sfidanza/chat-frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+    
+  app:
+    image: sfidanza/chat-backend
+    environment:
+      - MONGO_HOSTNAME=mongo
+      - MONGO_PORT=27017
+      - NODE_PORT=9090
+    expose:
+      - 9090
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:5-focal
+    volumes:
+      - mongodb:/data/db
+    expose:
+      - 27017
+
+  admin:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    
+volumes:
+  mongodb:

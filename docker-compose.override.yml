@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  nginx:
+    build: ./client
+    volumes:
+      - ./client/src:/var/www/public
+  
+  app:
+    build: ./server
+    volumes:
+      - ./server:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    ports:
+      - "9229:9229"
+    command: npm run debug
+
+volumes:
+  node_modules:
