@@ -17,6 +17,8 @@ services:
       - 9090
     depends_on:
       - mongo
+    deploy:
+      replicas: 3
 
   mongo:
     image: mongo:5-focal
