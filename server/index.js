@@ -1,12 +1,15 @@
 import WebSocket from "ws";
 import { MongoClient } from "mongodb";
 import dbModel from "./src/model.js";
+import getBot from "./src/bot.js";
 
 const {
 	MONGO_HOSTNAME,
 	MONGO_PORT,
 	NODE_PORT
 } = process.env;
+
+const BOT_TRIGGER = '/';
 
 let counter = 1;
 
@@ -49,6 +52,27 @@ dbClient.connect()
 							client.send(msg);
 						}
 					});
+
+					if (message.value.startsWith(BOT_TRIGGER)) {
+						let bot = getBot(wss.clients);
+						let response = bot.getMessage(message.value.slice(1), message.room);
+						if (response) {
+							let botMsg = {
+								type: "push-message",
+								value: response,
+								time: Date.now(),
+								author: "BOT"
+							};
+							model.update(message.room, botMsg);
+							botMsg = JSON.stringify(botMsg);
+							wss.clients.forEach(client => {
+								if (client.readyState === WebSocket.OPEN && client.user.room === message.room) {
+									client.send(botMsg);
+								}
+							});
+						}
+					}
+
 				} else if (message.type === "reset-room") {
 					model.empty(message.room);
 					let msg = {
