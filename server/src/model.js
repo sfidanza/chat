@@ -25,6 +25,15 @@ export default function getModel(collection) {
 		});
 	};
 
+	model.empty = function (room) {
+		collection.updateOne(
+			{ _id: room },
+			{ $set: { messages: [] } }
+		).catch(err => {
+			console.error(err);
+		});
+	};
+
 	model.delete = function (room) {
 		collection.deleteOne({ _id: room })
 			.catch(err => {

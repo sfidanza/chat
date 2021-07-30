@@ -78,6 +78,30 @@ chat.post = function (text) {
     });
 };
 
+chat.resetRoom = function () {
+    if (!this.activeRoom) return;
+    chat.send({
+        type: "reset-room",
+        room: this.activeRoom
+    });
+};
+
+chat.deleteRoom = function () {
+    if (!this.activeRoom) return;
+    chat.send({
+        type: "delete-room",
+        room: this.activeRoom
+    });
+};
+
+chat.createRoom = function () {
+    chat.send({
+        type: "create-room",
+        value: "Room 3",
+        room: "room3"
+    });
+};
+
 chat.selectFirstRoom = function () {
     let firstRoom = document.querySelector("#rooms li");
     if (firstRoom) {

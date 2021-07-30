@@ -14,6 +14,13 @@
 <div id="room-list">
     <ul id="rooms" onclick="chat.onSelectRoom(event);">
     </ul>
+    <div id="admin-panel" class="hidden">
+        <ul>
+            <li onclick="chat.resetRoom(); return false;">Reset room</li>
+            <!-- <li onclick="chat.deleteRoom(); return false;">Delete room</li> -->
+            <!-- <li onclick="chat.createRoom(); return false;">Create room</li> -->
+        </ul>
+    </div>
 </div>
 <dl id="room-content" class="hidden">
     

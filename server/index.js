@@ -49,6 +49,18 @@ dbClient.connect()
 							client.send(msg);
 						}
 					});
+				} else if (message.type === "reset-room") {
+					model.empty(message.room);
+					let msg = {
+						type: "room-history",
+						value: []
+					};
+					msg = JSON.stringify(msg);
+					wss.clients.forEach(client => {
+						if (client.readyState === WebSocket.OPEN && client.user.room === message.room) {
+							client.send(msg);
+						}
+					});
 				} else if (message.type === "select-room") {
 					ws.user.room = message.value;
 					model.get(message.value)

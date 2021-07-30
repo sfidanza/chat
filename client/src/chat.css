@@ -117,6 +117,28 @@ dl#room-content dd {
     margin: 0 0 1em 0;
 }
 
+#admin-panel {
+    color: var(--text-normal);
+    position: absolute;
+    bottom: 0px;
+}
+
+#admin-panel ul {
+    list-style: none;
+    padding: 0;
+}
+
+#admin-panel ul li {
+    line-height: 20px;
+    margin: 0 1em;
+    padding: 0.5em;
+    cursor: pointer;
+}
+
+#admin-panel ul li:hover {
+    text-decoration: underline;
+}
+
 .theme {
     --dim-title-height: 59px;
     --dim-input-height: 71px;
