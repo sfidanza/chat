@@ -10,15 +10,21 @@ services:
   app:
     image: sfidanza/chat-backend
     environment:
+      - NODE_PORT=9090
       - MONGO_HOSTNAME=mongo
       - MONGO_PORT=27017
-      - NODE_PORT=9090
+      - REDIS_HOSTNAME=redis
+      - REDIS_PORT=6379
     expose:
       - 9090
     depends_on:
       - mongo
+      - redis
     deploy:
       replicas: 3
+
+  redis:
+    image: redis:alpine
 
   mongo:
     image: mongo:5-focal

@@ -1,27 +1,36 @@
 import WebSocket from "ws";
 import { MongoClient } from "mongodb";
+import redis from "redis";
 import dbModel from "./src/model.js";
+import getApp from "./src/app.js";
 import getBot from "./src/bot.js";
 
 const {
+	NODE_PORT,
 	MONGO_HOSTNAME,
 	MONGO_PORT,
-	NODE_PORT
+	REDIS_HOSTNAME,
+	REDIS_PORT
 } = process.env;
 
 const BOT_TRIGGER = '/';
 
 let counter = 1;
 
-const dbClient = new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`);
-dbClient.connect()
-	.then(client => {
+new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`)
+	.connect()
+	.then(dbClient => {
 		console.log("Connected to mongodb!");
-		const db = client.db('chat').collection('chats');
-		const model = dbModel(db);
+		const model = dbModel(dbClient.db('chat').collection('chats'));
 		// ROOM_LIST.forEach(r => model.create(r.id));
 
+		const publisher = redis.createClient({
+			url: `redis://${REDIS_HOSTNAME}:${REDIS_PORT}`
+		});
+		const subscriber = publisher.duplicate();
+
 		const wss = new WebSocket.Server({ port: NODE_PORT });
+		const app = getApp(wss, model, publisher, subscriber);
 
 		wss.on("connection", ws => {
 			console.log(`New client connected to port ${NODE_PORT}!`);
@@ -33,67 +42,47 @@ dbClient.connect()
 					ws.user = {
 						name: message.user || "user" + counter++
 					};
-					let msg = {
+					app.send(ws, {
 						type: "room-list",
 						list: ROOM_LIST
-					};
-					ws.send(JSON.stringify(msg));
+					});
+
 				} else if (message.type === "send-message") {
-					let msg = {
+					app.saveAndBroadcast(message.room, {
 						type: "push-message",
 						value: message.value,
 						time: Date.now(),
 						author: ws.user.name
-					};
-					model.update(message.room, msg);
-					msg = JSON.stringify(msg);
-					wss.clients.forEach(client => {
-						if (client.readyState === WebSocket.OPEN && client.user.room === message.room) {
-							client.send(msg);
-						}
 					});
 
 					if (message.value.startsWith(BOT_TRIGGER)) {
 						let bot = getBot(wss.clients);
 						let response = bot.getMessage(message.value.slice(1), message.room);
 						if (response) {
-							let botMsg = {
+							app.saveAndBroadcast(message.room, {
 								type: "push-message",
 								value: response,
 								time: Date.now(),
 								author: "BOT"
-							};
-							model.update(message.room, botMsg);
-							botMsg = JSON.stringify(botMsg);
-							wss.clients.forEach(client => {
-								if (client.readyState === WebSocket.OPEN && client.user.room === message.room) {
-									client.send(botMsg);
-								}
 							});
 						}
 					}
 
 				} else if (message.type === "reset-room") {
 					model.empty(message.room);
-					let msg = {
+					app.broadcast(message.room, {
 						type: "room-history",
 						value: []
-					};
-					msg = JSON.stringify(msg);
-					wss.clients.forEach(client => {
-						if (client.readyState === WebSocket.OPEN && client.user.room === message.room) {
-							client.send(msg);
-						}
-					});
+					})
+
 				} else if (message.type === "select-room") {
 					ws.user.room = message.value;
 					model.get(message.value)
 						.then(result => {
-							let msg = {
+							app.send(ws, {
 								type: "room-history",
-								value: result && result.messages,
-							};
-							ws.send(JSON.stringify(msg));
+								value: result && result.messages
+							});
 						});
 				}
 			});
