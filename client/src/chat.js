@@ -5,24 +5,24 @@ const TPL_CHAT = (m) => `<dt>${m.author}</dt><dd>${m.value}</dd>`;
 const chat = {};
 const io = new WebSocket("ws://localhost:8080/ws/");
 
-chat.init = function() {
+chat.init = function () {
     let params = new URLSearchParams(document.location.search.substring(1));
     chat.user = params.get('user');
+    chat.admin = (params.get('admin') != null);
 
     io.onopen = chat.onSocketOpen.bind(chat);
     io.onmessage = chat.onSocketMessage.bind(chat);
 };
 
 chat.onSocketOpen = function (event) {
-    let msg = {
+    chat.send({
         type: "user-connect",
         user: chat.user
-    };
-    io.send(JSON.stringify(msg));
+    });
 };
 
 chat.onSocketMessage = function (event) {
-    console.log(event.data);
+    console.log("Received:", event.data);
     let data = JSON.parse(event.data);
     if (data.type === 'room-list') {
         chat.displayRooms(data.list);
@@ -33,10 +33,6 @@ chat.onSocketMessage = function (event) {
     }
 };
 
-chat.simpleMessage = function (type) {
-    return JSON.stringify({ type });
-};
-
 chat.displayRooms = function (rooms) {
     let contents = '';
     if (rooms && rooms.length) {
@@ -44,6 +40,7 @@ chat.displayRooms = function (rooms) {
     }
     const container = document.getElementById('rooms');
     container.innerHTML = contents;
+    chat.selectFirstRoom();
 };
 
 chat.addMessage = function (msg) {
@@ -64,42 +61,59 @@ chat.displayMessages = function (msgs) {
     container.scrollTo(0, container.scrollTopMax);
 };
 
+chat.send = function (msg) {
+    console.log("Sending:", msg);
+    io.send(JSON.stringify(msg));
+};
+
 chat.sanitize = function (text) {
     return text;
 };
 
 chat.post = function (text) {
-    let msg = {
+    chat.send({
         type: "send-message",
         value: this.sanitize(text),
         room: this.activeRoom
-    };
-    io.send(JSON.stringify(msg));
+    });
 };
 
-chat.selectRoom = function (e) {
+chat.selectFirstRoom = function () {
+    let firstRoom = document.querySelector("#rooms li");
+    if (firstRoom) {
+        chat.selectRoom(firstRoom.dataset.room, firstRoom);
+    }
+};
+
+chat.onSelectRoom = function (e) {
     let target = e.target;
-    if (target.dataset.room && target.dataset.room !== this.activeRoom) {
+    if (target.dataset.room) {
+        chat.selectRoom(target.dataset.room, target);
+    }
+};
+
+chat.selectRoom = function (room, roomElement) {
+    if (room !== this.activeRoom) {
         if (this.activeRoomElement) {
             this.activeRoomElement.classList.remove("active");
         } else {
             document.querySelector("#room-content").classList.remove("hidden");
             document.querySelector("#user-entry").classList.remove("hidden");
+            if (chat.admin) {
+                document.querySelector("#admin-panel").classList.remove("hidden");
+            }
         }
-        this.activeRoom = target.dataset.room;
-        this.activeRoomElement = target;
-        target.classList.add("active");
+        this.activeRoom = room;
+        this.activeRoomElement = roomElement;
+        roomElement.classList.add("active");
 
-        let msg = {
+        chat.send({
             type: "select-room",
             value: this.activeRoom
-        };
-        io.send(JSON.stringify(msg));
-
-        // this.clearMessages();
+        });
     }
 };
 
-window.addEventListener("load", function() {
-	chat.init();
+window.addEventListener("load", function () {
+    chat.init();
 }, false);

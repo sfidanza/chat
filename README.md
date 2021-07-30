@@ -12,7 +12,7 @@ Target:
 - Demonstrate a sample chat app with one server container
 - Scale it with multiple server containers
 
-## Running the code locally in dev mode
+## Run locally in dev mode
 
 To start/stop the app locally in dev mode, simply run:
 
@@ -24,7 +24,7 @@ This will implicitly use `docker-compose.override.yml`, which adds support for d
 - <http://localhost:8080> to access the web site
 - <http://localhost:8081> to access the Mongo DB admin panel
 
-## Running the code locally in prod mode
+## Run locally in production mode
 
 Start/stop the app from the repository root folder:
 
