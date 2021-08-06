@@ -38,11 +38,11 @@ Note: in VSCode, you can simply right-click on `docker-compose.yml` and choose `
 Let's use the magic of Docker Swarm to scale the application container. First, Swarm mode has to be active (all of this can be done on a proper Docker Swarm cluster of course):
 
     docker swarm init # just run once to intialize your swarm
-    docker swarm leave # to stop the swarm once testing is over
+    docker swarm leave --force # to stop the swarm once testing is over
 
 Then, the services can be started and stopped using the same `docker-compose.yml` file:
 
-    docker stack deploy -c .\docker-compose.yml chat  # start services
+    docker stack deploy -c ./docker-compose.yml chat  # start services
     docker stack rm chat  # stop services
 
 `chat` is used here as the stack identifier, which will isolate the set of services together. It will take some time to get the containers started. Status can be followed through VSCode Docker panel, Docker Desktop UI or through the CLI:
@@ -53,7 +53,14 @@ Obviously, with this setup, users can not talk correctly with each others anymor
 
 ## Publish to dockerhub
 
-TODO: setup a dockerhub repository for each image with auto-build on commit:
+Pending automation, here are the commands to build and publish to the dockerhub repository (while logged into docker hub of course):
+
+    docker build ./client/ -t sfidanza/chat-frontend
+    docker push sfidanza/chat-frontend:latest
+    docker build ./server/ -t sfidanza/chat-backend
+    docker push sfidanza/chat-backend:latest  
+
+Here are the resulting docker hub repositories:
 
 - [sfidanza/chat-frontend](https://hub.docker.com/repository/docker/sfidanza/chat-frontend)
 - [sfidanza/chat-backend](https://hub.docker.com/repository/docker/sfidanza/chat-backend)
@@ -62,3 +69,8 @@ TODO: setup a dockerhub repository for each image with auto-build on commit:
 
 - <https://hackernoon.com/scaling-websockets-9a31497af051>
 - <https://tsh.io/blog/how-to-scale-websocket/>
+
+## TODO
+
+- Server is applying a 60s timeout on websocket connections. Put in place a heartbeat mechanism:
+  <https://www.npmjs.com/package/ws#how-to-detect-and-close-broken-connections>

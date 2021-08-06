@@ -3,10 +3,10 @@ const TPL_ROOM = (r) => `<li data-room="${r.id}">${r.name}</li>`;
 const TPL_CHAT = (m) => `<dt>${m.author}</dt><dd>${m.value}</dd>`;
 
 const chat = {};
-const io = new WebSocket("ws://localhost:8080/ws/");
+const io = new WebSocket(`ws://${location.host}/ws/`);
 
 chat.init = function () {
-    let params = new URLSearchParams(document.location.search.substring(1));
+    let params = new URLSearchParams(location.search.substring(1));
     chat.user = params.get('user');
     chat.admin = (params.get('admin') != null);
 

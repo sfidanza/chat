@@ -22,7 +22,7 @@ new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`)
 	.then(dbClient => {
 		console.log("Connected to mongodb!");
 		const model = dbModel(dbClient.db('chat').collection('chats'));
-		// ROOM_LIST.forEach(r => model.create(r.id));
+		model.setup(ROOM_LIST);
 
 		const publisher = redis.createClient({
 			url: `redis://${REDIS_HOSTNAME}:${REDIS_PORT}`
@@ -81,7 +81,7 @@ new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`)
 						.then(result => {
 							app.send(ws, {
 								type: "room-history",
-								value: result && result.messages
+								value: (result && result.messages) || []
 							});
 						});
 				}
