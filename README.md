@@ -55,9 +55,8 @@ Obviously, with this setup, users can not talk correctly with each others anymor
 
 Pending automation, here are the commands to build and publish to the dockerhub repository (while logged into docker hub of course):
 
-    docker build ./client/ -t sfidanza/chat-frontend
+    docker-compose build
     docker push sfidanza/chat-frontend:latest
-    docker build ./server/ -t sfidanza/chat-backend
     docker push sfidanza/chat-backend:latest  
 
 Here are the resulting docker hub repositories:
@@ -69,8 +68,5 @@ Here are the resulting docker hub repositories:
 
 - <https://hackernoon.com/scaling-websockets-9a31497af051>
 - <https://tsh.io/blog/how-to-scale-websocket/>
-
-## TODO
-
-- Server is applying a 60s timeout on websocket connections. Put in place a heartbeat mechanism:
+- Server is applying a 60s timeout on websocket connections. Keepalive mechanism is inspired from:
   <https://www.npmjs.com/package/ws#how-to-detect-and-close-broken-connections>

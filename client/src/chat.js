@@ -12,6 +12,8 @@ chat.init = function () {
 
     io.onopen = chat.onSocketOpen.bind(chat);
     io.onmessage = chat.onSocketMessage.bind(chat);
+    io.onclose = chat.onSocketClose.bind(chat);
+    io.onerror = chat.onSocketError.bind(chat);
 };
 
 chat.onSocketOpen = function (event) {
@@ -21,43 +23,43 @@ chat.onSocketOpen = function (event) {
     });
 };
 
+chat.onSocketError = function (event) {
+    console.error(event);
+};
+
+chat.onSocketClose = function (event) {
+    console.error(event);
+};
+
 chat.onSocketMessage = function (event) {
     console.log("Received:", event.data);
     let data = JSON.parse(event.data);
     if (data.type === 'room-list') {
         chat.displayRooms(data.list);
-    } else if (data.type === 'push-message') {
-        chat.addMessage(data);
     } else if (data.type === 'room-history') {
         chat.displayMessages(data.value);
+    } else if (data.type === 'push-message') {
+        chat.addMessage(data);
     }
 };
 
 chat.displayRooms = function (rooms) {
-    let contents = '';
-    if (rooms && rooms.length) {
-        contents = rooms.reduce((str, room) => str + TPL_ROOM(room), '');
-    }
     const container = document.getElementById('rooms');
-    container.innerHTML = contents;
+    let html = rooms?.map(room => TPL_ROOM(room)) ?? [];
+    container.innerHTML = html.join('');
     chat.selectFirstRoom();
+};
+
+chat.displayMessages = function (msgs) {
+    const container = document.getElementById('room-content');
+    let html = msgs?.map(msg => TPL_CHAT(msg)) ?? [];
+    container.innerHTML = html.join("");
+    container.scrollTo(0, container.scrollTopMax);
 };
 
 chat.addMessage = function (msg) {
     const container = document.getElementById('room-content');
     container.innerHTML += TPL_CHAT(msg);
-    container.scrollTo(0, container.scrollTopMax);
-};
-
-chat.clearMessages = function () {
-    const container = document.getElementById('room-content');
-    container.innerHTML = "";
-};
-
-chat.displayMessages = function (msgs) {
-    const container = document.getElementById('room-content');
-    let html = msgs.map(msg => TPL_CHAT(msg));
-    container.innerHTML = html.join("");
     container.scrollTo(0, container.scrollTopMax);
 };
 
@@ -97,8 +99,8 @@ chat.deleteRoom = function () {
 chat.createRoom = function () {
     chat.send({
         type: "create-room",
-        value: "Room 3",
-        room: "room3"
+        value: "Room 4",
+        room: "room4"
     });
 };
 
