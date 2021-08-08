@@ -1,28 +1,28 @@
-import WebSocket from "ws";
-import getBot from "./bot.js";
+import WebSocket from 'ws';
+import getBot from './bot.js';
 
-const WS_CHANNEL_PREFIX = "chat:messages.";
+const WS_CHANNEL_PREFIX = 'chat:messages.';
 const BOT_TRIGGER = '/';
 
 /***[ Default rooms ]***/
 const ROOM_LIST = [{
-    id: "room1",
-    name: "Room 1"
+    id: 'room1',
+    name: 'Room 1'
 }, {
-    id: "room2",
-    name: "Room 2"
+    id: 'room2',
+    name: 'Room 2'
 }, {
-    id: "room3",
-    name: "Room 3"
+    id: 'room3',
+    name: 'Room 3'
 }];
 
 export default function getApp(wss, model, publisher, subscriber) {
     const app = {};
     const ROUTE = {
-        "user-connect": "userConnect",
-        "send-message": "sendMessage",
-        "select-room": "selectRoom",
-        "reset-room": "resetRoom"
+        'user-connect': 'userConnect',
+        'send-message': 'sendMessage',
+        'select-room': 'selectRoom',
+        'reset-room': 'resetRoom'
     };
 
     let counter = 1;
@@ -31,18 +31,18 @@ export default function getApp(wss, model, publisher, subscriber) {
     model.setup(ROOM_LIST);
 
     /***[Message Broker setup]***/
-    subscriber.on("pmessage", (pattern, channel, message) => {
-        console.log("Received pmessage through Redis:", pattern, channel, message);
+    subscriber.on('pmessage', (pattern, channel, message) => {
+        console.log('Received pmessage through Redis:', pattern, channel, message);
         let room = channel.slice(WS_CHANNEL_PREFIX.length);
         wss.clients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN && client.user.room === room) {
-                // console.log("Sending message to client:", client.user.name);
+            if (client.readyState === WebSocket.OPEN && client.user?.room === room) {
+                // console.log('Sending message to client:', client.user?.name);
                 client.send(message);
             }
         });
     });
 
-    subscriber.psubscribe(WS_CHANNEL_PREFIX + "*");
+    subscriber.psubscribe(WS_CHANNEL_PREFIX + '*');
 
     /***[Communication framework]***/
     app.send = function (client, msg) {
@@ -66,7 +66,7 @@ export default function getApp(wss, model, publisher, subscriber) {
         try {
             msg = JSON.parse(data);
         } catch (e) {
-            console.error("Invalid message:", e);
+            console.error('Invalid message:', e);
         }
 
         let route = ROUTE[msg && msg.type];
@@ -75,20 +75,20 @@ export default function getApp(wss, model, publisher, subscriber) {
 
     app.userConnect = function (client, msg) {
         client.user = {
-            name: msg.user || "user" + counter++
+            name: msg.user || 'user' + counter++
         };
         app.send(client, {
-            type: "room-list",
+            type: 'room-list',
             list: ROOM_LIST
         });
     };
 
     app.sendMessage = function (client, msg) {
         app.saveAndBroadcast(msg.room, {
-            type: "push-message",
+            type: 'push-message',
             value: msg.value,
             time: Date.now(),
-            author: client.user.name
+            author: client.user?.name
         });
 
         if (msg.value.startsWith(BOT_TRIGGER)) {
@@ -96,21 +96,25 @@ export default function getApp(wss, model, publisher, subscriber) {
             let response = bot.getMessage(msg.value.slice(1), msg.room);
             if (response) {
                 app.saveAndBroadcast(msg.room, {
-                    type: "push-message",
+                    type: 'push-message',
                     value: response,
                     time: Date.now(),
-                    author: "BOT"
+                    author: 'BOT'
                 });
             }
         }
     };
 
     app.selectRoom = function (client, msg) {
+        if (!client.user) {
+            console.error('[Select room] Invalid client');
+            return;
+        }
         client.user.room = msg.value;
         model.get(msg.value)
             .then(result => {
                 app.send(client, {
-                    type: "room-history",
+                    type: 'room-history',
                     value: (result && result.messages) || []
                 });
             });
@@ -119,7 +123,7 @@ export default function getApp(wss, model, publisher, subscriber) {
     app.resetRoom = function (client, msg) {
         model.empty(msg.room);
         app.broadcast(msg.room, {
-            type: "room-history",
+            type: 'room-history',
             value: []
         })
     };

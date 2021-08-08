@@ -117,6 +117,35 @@ dl#room-content dd {
     margin: 0 0 1em 0;
 }
 
+#disconnected-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgb(170, 170, 170, 0.7);
+    user-select: none;
+}
+
+#disconnected-overlay .modal-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    padding: 1em;
+    border-radius: 1em;
+    text-align: center;
+}
+
+#disconnected-overlay .modal-box h3 {
+    margin: 0 0 0.5em;
+}
+
+#disconnected-overlay .modal-box p {
+    margin: 0;
+}
+
 #admin-panel {
     color: var(--text-normal);
     position: absolute;
@@ -146,7 +175,6 @@ dl#room-content dd {
     --background-primary: #36393f;
     --background-secondary: #2f3136;
     --background-input: #40444b;
-    /* --header-shadow: #111111; */
     --text-highlight: #d6680e;
     --text-normal: #dcddde;
     --text-muted: #72767d;

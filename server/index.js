@@ -1,9 +1,9 @@
-import WebSocket from "ws";
-import { MongoClient } from "mongodb";
-import redis from "redis";
-import dbModel from "./src/model.js";
-import getApp from "./src/app.js";
-import keepalive from "./src/keepalive.js";
+import WebSocket from 'ws';
+import { MongoClient } from 'mongodb';
+import redis from 'redis';
+import dbModel from './src/model.js';
+import getApp from './src/app.js';
+import keepalive from './src/keepalive.js';
 
 const {
 	NODE_PORT,
@@ -16,7 +16,7 @@ const {
 new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`)
 	.connect()
 	.then(dbClient => {
-		console.log("Connected to mongodb!");
+		console.log('Connected to mongodb!');
 		const model = dbModel(dbClient.db('chat').collection('chats'));
 
 		const publisher = redis.createClient(`redis://${REDIS_HOSTNAME}:${REDIS_PORT}`);
@@ -25,12 +25,12 @@ new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`)
 		const wss = new WebSocket.Server({ port: NODE_PORT });
 		const app = getApp(wss, model, publisher, subscriber);
 
-		wss.on("connection", ws => {
+		wss.on('connection', ws => {
 			console.log(`New client connected to port ${NODE_PORT}!`);
 			keepalive(ws);
 
 			/***[ Message handling ]***/
-			ws.on("message", data => {
+			ws.on('message', data => {
 				app.dispatch(ws, data);
 			});
 		});

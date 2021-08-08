@@ -23,13 +23,18 @@
     </div>
 </div>
 <dl id="room-content" class="hidden">
-    
 </dl>
 <div id="user-entry" class="hidden">
     <form onsubmit="chat.post(this.elements.message.value); this.elements.message.value = ''; return false;">
         <input type="text" name="message" />
         <button type="submit"></button>
     </form>
+</div>
+<div id="disconnected-overlay" class="hidden">
+    <div class="modal-box">
+        <h3>Disconnected</h3>
+        <p>Hit Ctrl+R to reconnect</p>
+    </div>
 </div>
 </body>
 </html>

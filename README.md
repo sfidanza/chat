@@ -31,7 +31,11 @@ Start/stop the app from the repository root folder:
     docker-compose -f docker-compose.yml up -d
     docker-compose -f docker-compose.yml down
 
-Note: in VSCode, you can simply right-click on `docker-compose.yml` and choose `Compose Up` (or `Compose Restart` or `Compose Down`).
+In VSCode, you can simply right-click on `docker-compose.yml` and choose `Compose Up` (or `Compose Restart` or `Compose Down`).
+
+Note that this will not rebuild the images locally: it will use the ones in local cache or download from docker hub if images are more recent. To rebuild local images:
+
+    docker-compose build
 
 ## Run locally with multiple server instances
 

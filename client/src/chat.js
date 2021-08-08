@@ -3,22 +3,22 @@ const TPL_ROOM = (r) => `<li data-room="${r.id}">${r.name}</li>`;
 const TPL_CHAT = (m) => `<dt>${m.author}</dt><dd>${m.value}</dd>`;
 
 const chat = {};
-const io = new WebSocket(`ws://${location.host}/ws/`);
 
 chat.init = function () {
     let params = new URLSearchParams(location.search.substring(1));
     chat.user = params.get('user');
     chat.admin = (params.get('admin') != null);
 
-    io.onopen = chat.onSocketOpen.bind(chat);
-    io.onmessage = chat.onSocketMessage.bind(chat);
-    io.onclose = chat.onSocketClose.bind(chat);
-    io.onerror = chat.onSocketError.bind(chat);
+    this.io = new WebSocket(`ws://${location.host}/ws/`);
+    this.io.onopen = chat.onSocketOpen.bind(chat);
+    this.io.onmessage = chat.onSocketMessage.bind(chat);
+    this.io.onclose = chat.onSocketClose.bind(chat);
+    this.io.onerror = chat.onSocketError.bind(chat);
 };
 
 chat.onSocketOpen = function (event) {
     chat.send({
-        type: "user-connect",
+        type: 'user-connect',
         user: chat.user
     });
 };
@@ -28,11 +28,10 @@ chat.onSocketError = function (event) {
 };
 
 chat.onSocketClose = function (event) {
-    console.error(event);
+    chat.displayDisconnect();
 };
 
 chat.onSocketMessage = function (event) {
-    console.log("Received:", event.data);
     let data = JSON.parse(event.data);
     if (data.type === 'room-list') {
         chat.displayRooms(data.list);
@@ -53,7 +52,7 @@ chat.displayRooms = function (rooms) {
 chat.displayMessages = function (msgs) {
     const container = document.getElementById('room-content');
     let html = msgs?.map(msg => TPL_CHAT(msg)) ?? [];
-    container.innerHTML = html.join("");
+    container.innerHTML = html.join('');
     container.scrollTo(0, container.scrollTopMax);
 };
 
@@ -63,9 +62,12 @@ chat.addMessage = function (msg) {
     container.scrollTo(0, container.scrollTopMax);
 };
 
+chat.displayDisconnect = function () {
+    document.querySelector('#disconnected-overlay').classList.remove('hidden');
+};
+
 chat.send = function (msg) {
-    console.log("Sending:", msg);
-    io.send(JSON.stringify(msg));
+    this.io.send(JSON.stringify(msg));
 };
 
 chat.sanitize = function (text) {
@@ -74,7 +76,7 @@ chat.sanitize = function (text) {
 
 chat.post = function (text) {
     chat.send({
-        type: "send-message",
+        type: 'send-message',
         value: this.sanitize(text),
         room: this.activeRoom
     });
@@ -83,7 +85,7 @@ chat.post = function (text) {
 chat.resetRoom = function () {
     if (!this.activeRoom) return;
     chat.send({
-        type: "reset-room",
+        type: 'reset-room',
         room: this.activeRoom
     });
 };
@@ -91,21 +93,21 @@ chat.resetRoom = function () {
 chat.deleteRoom = function () {
     if (!this.activeRoom) return;
     chat.send({
-        type: "delete-room",
+        type: 'delete-room',
         room: this.activeRoom
     });
 };
 
 chat.createRoom = function () {
     chat.send({
-        type: "create-room",
-        value: "Room 4",
-        room: "room4"
+        type: 'create-room',
+        value: 'Room 4',
+        room: 'room4'
     });
 };
 
 chat.selectFirstRoom = function () {
-    let firstRoom = document.querySelector("#rooms li");
+    let firstRoom = document.querySelector('#rooms li');
     if (firstRoom) {
         chat.selectRoom(firstRoom.dataset.room, firstRoom);
     }
@@ -121,25 +123,25 @@ chat.onSelectRoom = function (e) {
 chat.selectRoom = function (room, roomElement) {
     if (room !== this.activeRoom) {
         if (this.activeRoomElement) {
-            this.activeRoomElement.classList.remove("active");
+            this.activeRoomElement.classList.remove('active');
         } else {
-            document.querySelector("#room-content").classList.remove("hidden");
-            document.querySelector("#user-entry").classList.remove("hidden");
+            document.querySelector('#room-content').classList.remove('hidden');
+            document.querySelector('#user-entry').classList.remove('hidden');
             if (chat.admin) {
-                document.querySelector("#admin-panel").classList.remove("hidden");
+                document.querySelector('#admin-panel').classList.remove('hidden');
             }
         }
         this.activeRoom = room;
         this.activeRoomElement = roomElement;
-        roomElement.classList.add("active");
+        roomElement.classList.add('active');
 
         chat.send({
-            type: "select-room",
+            type: 'select-room',
             value: this.activeRoom
         });
     }
 };
 
-window.addEventListener("load", function () {
+window.addEventListener('load', function () {
     chat.init();
 }, false);

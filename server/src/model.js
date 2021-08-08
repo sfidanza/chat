@@ -5,7 +5,7 @@ export default function getModel(collection) {
 		return collection.stats()
 			.then(result => {
 				if (result.count === 0) {
-					console.log("Database empty: creating default rooms.");
+					console.log('Database empty: creating default rooms.');
 					roomList.forEach(r => model.create(r.id));
 				}
 			})
@@ -29,7 +29,7 @@ export default function getModel(collection) {
 			{ $push: { messages: message } }
 		).then(result => {
 			if (result.matchedCount === 0) {
-				console.error("\x1b[31m%s\x1b[0m", "[Model update] No matching room for", room);
+				console.error('\x1b[31m%s\x1b[0m', '[Model update] No matching room for', room);
 			}
 		}).catch(console.error);
 
