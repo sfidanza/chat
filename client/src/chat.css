@@ -117,7 +117,7 @@ dl#room-content dd {
     margin: 0 0 1em 0;
 }
 
-#disconnected-overlay {
+.modal-overlay {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -127,7 +127,7 @@ dl#room-content dd {
     user-select: none;
 }
 
-#disconnected-overlay .modal-box {
+.modal-overlay .modal-box {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -135,11 +135,21 @@ dl#room-content dd {
     background-color: #333;
     padding: 1em;
     border-radius: 1em;
-    text-align: center;
 }
 
-#disconnected-overlay .modal-box h3 {
+.modal-overlay .modal-box .close-modal {
+    float: right;
+    background: url("img/close-icon.png") no-repeat;
+    width: 24px;
+    height: 24px;
+}
+
+.modal-overlay .modal-box h3 {
     margin: 0 0 0.5em;
+}
+
+#disconnected-overlay .modal-box {
+    text-align: center;
 }
 
 #disconnected-overlay .modal-box p {
