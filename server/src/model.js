@@ -18,7 +18,7 @@ export default function getModel(collection) {
 	};
 
 	model.create = function (room) {
-		let obj = { _id: room, messages: [] };
+		const obj = { _id: room, messages: [] };
 		collection.insertOne(obj)
 			.catch(console.error);
 	};

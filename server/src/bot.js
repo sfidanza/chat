@@ -6,12 +6,12 @@ export default function getBot(clients) {
     };
 
     bot.getMessage = function (command, room) {
-        let method = COMMANDS[command];
+        const method = COMMANDS[command];
         return method && this[method] && this[method](room);
     };
 
     bot.getUsersInRoom = function (room) {
-        let users = [];
+        const users = [];
         clients.forEach(c => {
             if (c.user.room === room) {
                 users.push(c.user.name);

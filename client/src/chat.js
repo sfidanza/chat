@@ -5,7 +5,7 @@ const TPL_CHAT = (m) => `<dt>${m.author}</dt><dd>${m.value}</dd>`;
 const chat = {};
 
 chat.init = function () {
-    let params = new URLSearchParams(location.search.substring(1));
+    const params = new URLSearchParams(location.search.substring(1));
     chat.user = params.get('user');
     chat.admin = (params.get('admin') != null);
 
@@ -32,7 +32,7 @@ chat.onSocketClose = function (event) {
 };
 
 chat.onSocketMessage = function (event) {
-    let data = JSON.parse(event.data);
+    const data = JSON.parse(event.data);
     if (data.type === 'room-list') {
         chat.displayRooms(data.list);
     } else if (data.type === 'room-history') {
@@ -44,14 +44,14 @@ chat.onSocketMessage = function (event) {
 
 chat.displayRooms = function (rooms) {
     const container = document.getElementById('rooms');
-    let html = rooms?.map(room => TPL_ROOM(room)) ?? [];
+    const html = rooms?.map(room => TPL_ROOM(room)) ?? [];
     container.innerHTML = html.join('');
     chat.selectFirstRoom();
 };
 
 chat.displayMessages = function (msgs) {
     const container = document.getElementById('room-content');
-    let html = msgs?.map(msg => TPL_CHAT(msg)) ?? [];
+    const html = msgs?.map(msg => TPL_CHAT(msg)) ?? [];
     container.innerHTML = html.join('');
     container.scrollTo(0, container.scrollTopMax);
 };
@@ -107,14 +107,14 @@ chat.createRoom = function () {
 };
 
 chat.selectFirstRoom = function () {
-    let firstRoom = document.querySelector('#rooms li');
+    const firstRoom = document.querySelector('#rooms li');
     if (firstRoom) {
         chat.selectRoom(firstRoom.dataset.room, firstRoom);
     }
 };
 
 chat.onSelectRoom = function (e) {
-    let target = e.target;
+    const target = e.target;
     if (target.dataset.room) {
         chat.selectRoom(target.dataset.room, target);
     }

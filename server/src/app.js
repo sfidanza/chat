@@ -33,7 +33,7 @@ export default function getApp(wss, model, publisher, subscriber) {
     /***[Message Broker setup]***/
     subscriber.on('pmessage', (pattern, channel, message) => {
         console.log('Received pmessage through Redis:', pattern, channel, message);
-        let room = channel.slice(WS_CHANNEL_PREFIX.length);
+        const room = channel.slice(WS_CHANNEL_PREFIX.length);
         wss.clients.forEach(client => {
             if (client.readyState === WebSocket.OPEN && client.user?.room === room) {
                 // console.log('Sending message to client:', client.user?.name);
@@ -69,7 +69,7 @@ export default function getApp(wss, model, publisher, subscriber) {
             console.error('Invalid message:', e);
         }
 
-        let route = ROUTE[msg && msg.type];
+        const route = ROUTE[msg && msg.type];
         if (route) app[route](client, msg);
     };
 
@@ -92,8 +92,8 @@ export default function getApp(wss, model, publisher, subscriber) {
         });
 
         if (msg.value.startsWith(BOT_TRIGGER)) {
-            let bot = getBot(wss.clients);
-            let response = bot.getMessage(msg.value.slice(1), msg.room);
+            const bot = getBot(wss.clients);
+            const response = bot.getMessage(msg.value.slice(1), msg.room);
             if (response) {
                 app.saveAndBroadcast(msg.room, {
                     type: 'push-message',
