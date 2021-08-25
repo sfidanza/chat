@@ -125,7 +125,7 @@ export default function getApp(wss, model, publisher, subscriber) {
         app.broadcast(msg.room, {
             type: 'room-history',
             value: []
-        })
+        });
     };
 
     return app;

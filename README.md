@@ -24,6 +24,11 @@ This will implicitly use `docker-compose.override.yml`, which adds support for d
 - <http://localhost:8080> to access the web site
 - <http://localhost:8081> to access the Mongo DB admin panel
 
+Once containers are running, right click on container in VS Code to view logs or open a shell. For example, opening a shell on the backend container allows to `npm install` new dependencies, `npm update`... To run eslint:
+
+    npm run lint
+    npm run lint -- --fix   # to let eslint provide fixes automatically
+
 ## Run locally in production mode
 
 Start/stop the app from the repository root folder:
