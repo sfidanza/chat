@@ -1,9 +1,9 @@
-import WebSocket from 'ws';
+import { WebSocketServer } from 'ws';
 import { MongoClient } from 'mongodb';
 import redis from 'redis';
-import dbModel from './src/model.js';
-import getApp from './src/app.js';
-import keepalive from './src/keepalive.js';
+import dbModel from './model.js';
+import getApp from './app.js';
+import keepalive from './keepalive.js';
 
 const {
 	NODE_PORT,
@@ -22,7 +22,7 @@ new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`)
 		const publisher = redis.createClient(`redis://${REDIS_HOSTNAME}:${REDIS_PORT}`);
 		const subscriber = publisher.duplicate();
 
-		const wss = new WebSocket.Server({ port: NODE_PORT });
+		const wss = new WebSocketServer({ port: NODE_PORT });
 		const app = getApp(wss, model, publisher, subscriber);
 
 		wss.on('connection', ws => {
@@ -30,8 +30,9 @@ new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`)
 			keepalive(ws);
 
 			/***[ Message handling ]***/
-			ws.on('message', data => {
-				app.dispatch(ws, data);
+			ws.on('message', (data, isBinary) => {
+				const message = isBinary ? data : data.toString();
+				app.dispatch(ws, message);
 			});
 		});
 	}).catch(console.error);

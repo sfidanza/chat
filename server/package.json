@@ -4,19 +4,19 @@
   "author": "Stéphane Fidanza <stephane.fidanza@gmail.com>",
   "description": "Scaling websockets",
   "dependencies": {
-    "mongodb": "^4.0.1",
+    "mongodb": "^4.1.2",
     "redis": "^3.1.2",
-    "ws": "^7.5.3"
+    "ws": "^8.2.2"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.13"
   },
   "scripts": {
-    "start": "node --experimental-json-modules index.js",
-    "debug": "nodemon --inspect=0.0.0.0:9229 --legacy-watch --experimental-json-modules index.js",
+    "start": "node --experimental-json-modules src/index.js",
+    "debug": "nodemon --inspect=0.0.0.0:9229 --legacy-watch --experimental-json-modules src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint **/*.js"
+    "lint": "eslint ."
   },
   "main": "index.js",
   "type": "module",
