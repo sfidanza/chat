@@ -60,18 +60,12 @@ Then, the services can be started and stopped using the same `docker-compose.yml
 
 Obviously, with this setup, users can not talk correctly with each others anymore, as each server only knows users connected to itself. We need a communication mechanism between servers as well.
 
-## Publish to dockerhub
+## CI pipeline
 
-Pending automation, here are the commands to build and publish to the dockerhub repository (while logged into docker hub of course):
+The github workflow is triggered when pushing commits on github: it automatically builds and publishes images to github container repository.
 
-    docker-compose build
-    docker push sfidanza/chat-frontend:latest
-    docker push sfidanza/chat-backend:latest  
-
-Here are the resulting docker hub repositories:
-
-- [sfidanza/chat-frontend](https://hub.docker.com/repository/docker/sfidanza/chat-frontend)
-- [sfidanza/chat-backend](https://hub.docker.com/repository/docker/sfidanza/chat-backend)
+- [sfidanza/chat-frontend](https://github.com/sfidanza/sharks/pkgs/container/chat-frontend)
+- [sfidanza/chat-backend](https://github.com/sfidanza/sharks/pkgs/container/chat-backend)
 
 ## References
 

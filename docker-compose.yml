@@ -1,14 +1,14 @@
 version: '3.8'
 services:
   nginx:
-    image: sfidanza/chat-frontend
+    image: ghcr.io/sfidanza/chat-frontend
     ports:
       - "9080:8080"
     depends_on:
       - app
     
   app:
-    image: sfidanza/chat-backend
+    image: ghcr.io/sfidanza/chat-backend
     environment:
       - NODE_PORT=9090
       - MONGO_HOSTNAME=mongo
