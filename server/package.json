@@ -4,13 +4,13 @@
   "author": "Stéphane Fidanza <stephane.fidanza@gmail.com>",
   "description": "Scaling websockets",
   "dependencies": {
-    "mongodb": "^4.1.4",
-    "redis": "^3.1.2",
-    "ws": "^8.2.3"
+    "mongodb": "4.x",
+    "redis": "3.x",
+    "ws": "8.x"
   },
   "devDependencies": {
-    "eslint": "^8.2.0",
-    "nodemon": "^2.0.15"
+    "eslint": "8.x",
+    "nodemon": "2.x"
   },
   "scripts": {
     "start": "node --experimental-json-modules src/index.js",
