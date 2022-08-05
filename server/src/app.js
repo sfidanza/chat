@@ -31,8 +31,8 @@ export default function getApp(wss, model, publisher, subscriber) {
     model.setup(ROOM_LIST);
 
     /***[Message Broker setup]***/
-    subscriber.on('pmessage', (pattern, channel, message) => {
-        console.log('Received pmessage through Redis:', pattern, channel, message);
+    subscriber.pSubscribe(WS_CHANNEL_PREFIX + '*', (message, channel) => {
+        console.log('Received pmessage through Redis:', channel, message);
         const room = channel.slice(WS_CHANNEL_PREFIX.length);
         wss.clients.forEach(client => {
             if (client.readyState === WebSocket.OPEN && client.user?.room === room) {
@@ -41,8 +41,6 @@ export default function getApp(wss, model, publisher, subscriber) {
             }
         });
     });
-
-    subscriber.psubscribe(WS_CHANNEL_PREFIX + '*');
 
     /***[Communication framework]***/
     app.send = function (client, msg) {

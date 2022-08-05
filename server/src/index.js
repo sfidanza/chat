@@ -13,14 +13,16 @@ const {
 	REDIS_PORT
 } = process.env;
 
-new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`)
-	.connect()
-	.then(dbClient => {
+const publisher = redis.createClient({ url: `redis://${REDIS_HOSTNAME}:${REDIS_PORT}` });
+const subscriber = publisher.duplicate();
+
+Promise.all([
+		new MongoClient(`mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}`).connect(),
+		publisher.connect(),
+		subscriber.connect()
+	]).then(([dbClient]) => {
 		console.log('Connected to mongodb!');
 		const model = dbModel(dbClient.db('chat').collection('chats'));
-
-		const publisher = redis.createClient(`redis://${REDIS_HOSTNAME}:${REDIS_PORT}`);
-		const subscriber = publisher.duplicate();
 
 		const wss = new WebSocketServer({ port: NODE_PORT });
 		const app = getApp(wss, model, publisher, subscriber);

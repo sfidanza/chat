@@ -4,6 +4,7 @@ This is a sample app to demonstrate how to create and scale a websocket applicat
 
 - nginx (serve statics, load balancer above the node.js containers)
 - node.js (application server)
+- redis as pub/sub layer between the server containers
 - MongoDB
 - mongo-express for DB administration
 
@@ -21,8 +22,8 @@ To start/stop the app locally in dev mode, simply run:
 
 This will implicitly use `docker-compose.override.yml`, which adds support for debugging and maps the local source files into the containers so you can edit the source live. Two ports are exposed:
 
-- <http://localhost:8080> to access the web site
-- <http://localhost:8081> to access the Mongo DB admin panel
+- <http://localhost:9080> to access the web site
+- <http://localhost:9081> to access the Mongo DB admin panel
 
 Once containers are running, right click on container in VS Code to view logs or open a shell. For example, opening a shell on the backend container allows to `npm install` new dependencies, `npm update`... To run eslint:
 
@@ -58,7 +59,7 @@ Then, the services can be started and stopped using the same `docker-compose.yml
 
     docker stack services chat
 
-Obviously, with this setup, users can not talk correctly with each others anymore, as each server only knows users connected to itself. We need a communication mechanism between servers as well.
+Containers communicate through redis (see [architecture diagram](doc/)). Messages can be followed in the server logs.
 
 ## CI pipeline
 
