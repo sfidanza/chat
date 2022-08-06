@@ -6,7 +6,7 @@ Let's take the example of a new chat message being typed by one client:
 
 1. Send message
     - one client sends a message to one app instance through websocket
-    - this message is sent in a specifc chat room
+    - this message is sent in a specific chat room
 2. Save to persistent storage
     - the app instance first stores the message in DB (anyone can join the chat later and will need all messages)
     - each room is a MongoDB document, in which the new message is appended

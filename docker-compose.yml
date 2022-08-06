@@ -2,8 +2,6 @@ version: '3.8'
 services:
   nginx:
     image: ghcr.io/sfidanza/chat-frontend
-    ports:
-      - "9080:8080"
     depends_on:
       - app
     
@@ -32,13 +30,6 @@ services:
       - mongodb:/data/db
     expose:
       - 27017
-
-  admin:
-    image: mongo-express:latest
-    ports:
-      - "9081:8081"
-    depends_on:
-      - mongo
     
 volumes:
   mongodb:
