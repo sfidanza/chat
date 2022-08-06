@@ -9,7 +9,8 @@ chat.init = function () {
     chat.user = params.get('user');
     chat.admin = (params.get('admin') != null);
 
-    this.io = new WebSocket(`ws://${location.host}/ws/`);
+    const protocol = (location.protocol === 'https:') ? 'wss:' : 'ws:';
+    this.io = new WebSocket(`${protocol}//${location.host}/ws/`);
     this.io.onopen = chat.onSocketOpen.bind(chat);
     this.io.onmessage = chat.onSocketMessage.bind(chat);
     this.io.onclose = chat.onSocketClose.bind(chat);
