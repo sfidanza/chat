@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "eslint": "8.x",
-    "nodemon": "2.x"
+    "nodemon": "2.0.20"
   },
   "scripts": {
     "start": "node --experimental-json-modules src/index.js",
