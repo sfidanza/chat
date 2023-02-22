@@ -74,3 +74,9 @@ The github workflow is triggered when pushing commits on github: it automaticall
 - <https://tsh.io/blog/how-to-scale-websocket/>
 - Server is applying a 60s timeout on websocket connections. Keepalive mechanism is inspired from:
   <https://www.npmjs.com/package/ws#how-to-detect-and-close-broken-connections>
+
+## Todo
+
+- Add responsive design to support mobiles
+- Add login
+- Fix /list-users (only listing users of current pod)
