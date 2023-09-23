@@ -4,9 +4,9 @@
   "author": "Stéphane Fidanza <stephane.fidanza@gmail.com>",
   "description": "Scaling websockets",
   "dependencies": {
-    "mongodb": "6.x",
-    "redis": "4.x",
-    "ws": "8.x"
+    "mongodb": "6.1.0",
+    "redis": "4.6.10",
+    "ws": "8.14.2"
   },
   "devDependencies": {
     "eslint": "8.50.0",

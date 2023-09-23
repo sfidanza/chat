@@ -2,9 +2,9 @@ export default function getModel(collection) {
 	const model = {};
 
 	model.setup = function (roomList) {
-		return collection.stats()
-			.then(result => {
-				if (result.count === 0) {
+		return collection.estimatedDocumentCount()
+			.then(count => {
+				if (count === 0) {
 					console.log('Database empty: creating default rooms.');
 					roomList.forEach(r => model.create(r.id));
 				}
