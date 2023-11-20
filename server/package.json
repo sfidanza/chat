@@ -5,7 +5,7 @@
   "description": "Scaling websockets",
   "dependencies": {
     "mongodb": "6.3.0",
-    "redis": "4.6.10",
+    "redis": "4.6.11",
     "ws": "8.14.2"
   },
   "devDependencies": {
