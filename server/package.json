@@ -9,7 +9,7 @@
     "ws": "8.15.1"
   },
   "devDependencies": {
-    "eslint": "8.55.0",
+    "eslint": "8.56.0",
     "nodemon": "3.0.2"
   },
   "scripts": {
