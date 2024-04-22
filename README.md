@@ -1,6 +1,6 @@
 # Scaling websocket testing through a simple chat application
 
-This is a sample app to demonstrate how to create and scale a websocket application (using node.js and docker-compose). The application is made of several containers:
+This is a sample app to demonstrate how to create and scale a websocket application (using node.js and docker compose). The application is made of several containers:
 
 - nginx (serve statics, load balancer above the node.js containers)
 - node.js (application server)
@@ -17,8 +17,8 @@ Target:
 
 To start/stop the app locally in dev mode, simply run:
 
-    docker-compose up -d --build
-    docker-compose down
+    docker compose up -d --build
+    docker compose down
 
 This will implicitly use `docker-compose.override.yml`, which adds support for debugging and maps the local source files into the containers so you can edit the source live. Two ports are exposed:
 
@@ -34,14 +34,14 @@ Once containers are running, right click on container in VS Code to view logs or
 
 Start/stop the app from the repository root folder:
 
-    docker-compose -f docker-compose.yml up -d
-    docker-compose -f docker-compose.yml down
+    docker compose -f docker-compose.yml up -d
+    docker compose -f docker-compose.yml down
 
 In VSCode, you can simply right-click on `docker-compose.yml` and choose `Compose Up` (or `Compose Restart` or `Compose Down`).
 
 Note that this will not rebuild the images locally: it will use the ones in local cache or download from docker hub if images are more recent. To rebuild local images:
 
-    docker-compose build
+    docker compose build
 
 ## Run locally with multiple server instances
 
