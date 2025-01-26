@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link type="image/png" rel="shortcut icon" href="img/favicon.png"/>
     <link href="chat.css" rel="stylesheet">
-    <script type="text/javascript" src="chat.js"></script>
+    <script type="module" src="chat.js"></script>
 </head>
 <body class="theme">
 <h1>Chat rooms</h1>
@@ -43,6 +43,7 @@
             <span id="device-name"></span>
         </p>
         <video id="localVideoFeed" autoplay playsinline muted></video>
+        <video id="remoteVideoFeed" autoplay playsinline muted></video>
     </div>
 </div>
 <div id="disconnected-overlay" class="modal-overlay hidden">
