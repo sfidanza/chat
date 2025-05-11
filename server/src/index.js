@@ -13,7 +13,10 @@ const {
 	REDIS_PORT
 } = process.env;
 
-const publisher = redis.createClient({ url: `redis://${REDIS_HOSTNAME}:${REDIS_PORT}` });
+const publisher = redis.createClient({
+	url: `redis://${REDIS_HOSTNAME}:${REDIS_PORT}`,
+	RESP: 3
+});
 const subscriber = publisher.duplicate();
 
 Promise.all([
