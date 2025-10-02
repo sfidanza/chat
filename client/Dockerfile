@@ -1,6 +1,6 @@
-FROM bitnami/nginx:latest
+FROM nginx:1.29.1-alpine
 
-#RUN rm /etc/nginx/conf.d/default.conf
-COPY sites-available/chat.conf /opt/bitnami/nginx/conf/server_blocks/
+RUN rm /etc/nginx/conf.d/default.conf
+COPY sites-available/chat.conf /etc/nginx/conf.d/
 
 COPY ./src /var/www/public
