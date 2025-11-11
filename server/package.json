@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "eslint": "9.39.1",
-    "nodemon": "3.1.10"
+    "nodemon": "3.1.11"
   },
   "scripts": {
     "start": "node src/index.js",
