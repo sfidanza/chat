@@ -21,7 +21,7 @@ services:
       replicas: 3
 
   redis:
-    image: redis:8.4-alpine
+    image: redis:8.6-alpine
 
   mongo:
     image: mongo:4-focal  # MongoDB 5.0+ requires a CPU with AVX support. Does not run in production!
