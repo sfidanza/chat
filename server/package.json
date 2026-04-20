@@ -4,7 +4,7 @@
   "author": "Stéphane Fidanza <stephane.fidanza@gmail.com>",
   "description": "Scaling websockets",
   "dependencies": {
-    "mongodb": "7.1.1",
+    "mongodb": "7.2.0",
     "redis": "5.12.1",
     "ws": "8.20.0"
   },
