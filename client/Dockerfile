@@ -1,4 +1,4 @@
-FROM nginx:1.31.1-alpine
+FROM nginx:1.31.2-alpine
 
 RUN rm /etc/nginx/conf.d/default.conf
 COPY sites-available/chat.conf /etc/nginx/conf.d/
