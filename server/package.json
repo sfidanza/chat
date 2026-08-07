@@ -6,7 +6,7 @@
   "dependencies": {
     "mongodb": "7.5.0",
     "redis": "6.2.0",
-    "ws": "8.21.2"
+    "ws": "8.21.3"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
